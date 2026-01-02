@@ -1,0 +1,17 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}标签{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>商品标签</strong></div>
+  <div class="panel-body">
+    {% for t in tags %}
+      <a href="{% url 'market:search_by_tag' t.tag_id %}"
+         class="label label-primary"
+         style="margin-right:5px; display:inline-block;">
+        {{ t.name }}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

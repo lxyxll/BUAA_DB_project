@@ -1,0 +1,35 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}我的投诉{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>我的投诉</strong></div>
+  <div class="panel-body">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>投诉编号</th>
+          <th>订单</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in complaints %}
+        <tr>
+          <td>#{{ c.complaint_id }}</td>
+          <td>#{{ c.order_id }}</td>
+          <td>
+            <span class="label label-info">{{ c.status }}</span>
+          </td>
+          <td>
+            <a href="{% url 'market:complaint_detail' c.complaint_id %}"
+               class="btn btn-xs btn-primary">详情</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

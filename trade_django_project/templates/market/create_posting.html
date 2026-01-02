@@ -1,0 +1,90 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}发布商品{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>发布商品</strong></div>
+  <div class="panel-body">
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label>标题</label>
+        <input type="text" name="title" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label>描述</label>
+        <textarea name="content" class="form-control" rows="4"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>价格</label>
+        <input type="number" name="price" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label>库存</label>
+        <input type="number" name="quantity" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label>品牌</label>
+        <input type="text" name="brand" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>封面图片（上传）</label>
+        <input type="file" name="image" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>封面图片URL（可选：用于本地图片或演示）</label>
+        <input type="text" name="image_url" class="form-control" placeholder="/media/postings/111.jpg">
+      </div>
+
+
+      <div class="form-group">
+        <label>成色</label>
+        <select name="condition" class="form-control">
+          <option value="全新">全新</option>
+          <option value="几乎全新">几乎全新</option>
+          <option value="轻微使用痕迹">轻微使用痕迹</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+  <label>标签</label>
+  <select name="tag_id" class="form-control">
+    {% for tag in tags %}
+      <option value="{{ tag.tag_id }}">{{ tag.tag_name }}</option>
+    {% empty %}
+      <option disabled>暂无标签</option>
+    {% endfor %}
+  </select>
+</div>
+
+
+      <div class="form-group">
+        <label>可见范围</label>
+        <select name="scope" class="form-control">
+          <option value="寝室">寝室</option>
+          <option value="楼层">楼层</option>
+          <option value="楼栋">楼栋</option>
+          <option value="全楼">全楼</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary">发布</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

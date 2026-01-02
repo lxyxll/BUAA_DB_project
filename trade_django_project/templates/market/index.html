@@ -1,0 +1,68 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}首页{% endblock %}
+
+{% block content %}
+
+{# ===== 登录状态区 ===== #}
+<div class="row" style="margin-bottom:20px;">
+  <div class="col-md-12">
+    {% if is_logged_in %}
+      <p>欢迎你，{{ username }}！</p>
+      <a href="{% url 'market:create_posting' %}" class="btn btn-xs btn-success">发布出物</a>
+    {% else %}
+      <a href="{% url 'accounts:login' %}" class="btn btn-xs btn-primary">登录</a>
+      <a href="{% url 'accounts:register' %}" class="btn btn-xs btn-default">注册</a>
+    {% endif %}
+  </div>
+</div>
+
+{# ===== 公告区 ===== #}
+{% if announcements %}
+<div class="row">
+  <div class="col-md-12">
+    <h4>最新公告</h4>
+    <ul>
+      {% comment %} 只显示最新的5条公告 {% endcomment %}
+      {% with announcements|slice:":5" as announcements %}
+      {% for a in announcements %}
+        <li>
+          <a style="color:#0f0201" href="{% url 'market:announcement_detail' a.notice_id %}">
+            {{ a.title }}
+          </a>
+        </li>
+      {% endfor %}
+      {% endwith %}
+    </ul>
+  </div>
+</div>
+<hr>
+{% endif %}
+
+{# ===== 出物列表 ===== #}
+<div class="row">
+  {% for p in postings %}
+  <div class="col-md-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>{{ p.title }}</strong>
+      </div>
+      <div class="panel-body">
+        {% if p.image_url %}
+          <div style="margin-bottom: 15px; text-align: center;">
+            <img src="{{ p.image_url }}" alt="商品图片"
+                style="max-height: 100px; width: auto; display: inline-block; border: 1px solid #eee; padding: 2px;">
+          </div>
+        {% endif %}
+        <p>价格：￥{{ p.price }}</p>
+        <p>库存：{{ p.quantity }}</p>
+        <a href="{% url 'market:posting_detail' p.posting_id %}"
+           class="btn btn-xs btn-info">查看详情</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+

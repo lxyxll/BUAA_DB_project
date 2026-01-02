@@ -1,0 +1,30 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}公告详情{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>{{ announcement.title }}</strong>
+    <span class="pull-right text-muted">{{ announcement.created_at }}</span>
+  </div>
+
+  <div class="panel-body">
+    <p style="white-space: pre-wrap;">{{ announcement.content }}</p>
+
+    <a class="btn btn-default btn-sm" href="{% url 'market:announcement_list' %}">返回列表</a>
+
+    {% if is_admin %}
+      <form method="post"
+            action="{% url 'market:admin_delete_announcement' announcement.notice_id %}"
+            style="display:inline;">
+        {% csrf_token %}
+        <button type="submit"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('确认删除该公告？');">
+          删除公告
+        </button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

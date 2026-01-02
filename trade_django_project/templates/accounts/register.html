@@ -1,0 +1,95 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}用户注册{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <div class="auth-box">
+    <h1>用户注册</h1>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-danger">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label>用户名</label>
+        <input type="text" name="username" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label>学号</label>
+        <input type="text" name="student_id" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label>邮箱</label>
+        <input type="email" name="email" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label>微信号</label>
+        <input type="text" name="wechat" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>注册类型</label>
+        <select name="account_type" id="account_type" class="form-control" required>
+          <option value="user" selected>普通用户</option>
+          <option value="admin">管理员</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="admin_code_group" style="display:none;">
+        <label>管理员注册码</label>
+        <input type="password" name="admin_code" class="form-control" placeholder="请输入管理员注册码">
+      </div>
+
+      <script>
+        (function () {
+          var sel = document.getElementById("account_type");
+          var group = document.getElementById("admin_code_group");
+
+          function toggle() {
+            group.style.display = (sel.value === "admin") ? "block" : "none";
+          }
+
+          sel.addEventListener("change", toggle);
+          toggle();
+        })();
+      </script>
+      
+      <div class="form-group">
+        <label>寝室</label>
+        <select name="room_id" class="form-control" required>
+          <option value="">请选择寝室</option>
+          {% for room in rooms %}
+            <option value="{{ room.room_id }}">
+              {{ room.building }}-{{ room.room_no }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>密码</label>
+        <input type="password" name="password" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label>确认密码</label>
+        <input type="password" name="password2" class="form-control" required>
+      </div>
+
+      <button type="submit" class="btn btn-success btn-block">注册</button>
+    </form>
+
+    <div style="margin-top:10px;text-align:center;">
+      <a href="{% url 'accounts:login' %}">已有账号？去登录</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

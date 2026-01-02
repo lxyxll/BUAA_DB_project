@@ -1,0 +1,67 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}投诉管理{% endblock %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>投诉管理（管理员）</strong></div>
+  <div class="panel-body">
+
+    <div style="margin-bottom: 10px;">
+      <a class="btn btn-default btn-xs" href="{% url 'market:admin_complaint_list' %}?status=全部">全部</a>
+      <a class="btn btn-danger btn-xs"  href="{% url 'market:admin_complaint_list' %}?status=待处理">待处理</a>
+      <a class="btn btn-warning btn-xs" href="{% url 'market:admin_complaint_list' %}?status=处理中">处理中</a>
+      <a class="btn btn-success btn-xs" href="{% url 'market:admin_complaint_list' %}?status=已处理">已处理</a>
+      <a class="btn btn-default btn-xs" href="{% url 'market:admin_complaint_list' %}?status=驳回">驳回</a>
+    </div>
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>投诉编号</th>
+          <th>订单</th>
+          <th>投诉人</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in complaints %}
+        <tr>
+          <td>#{{ c.complaint_id }}</td>
+          <td>#{{ c.order_id }}</td>
+          <td>{{ c.user_name }}</td>
+          <td>
+            {% if c.status == "待处理" %}
+              <span class="label label-danger">待处理</span>
+            {% elif c.status == "处理中" %}
+              <span class="label label-warning">处理中</span>
+            {% elif c.status == "驳回" %}
+              <span class="label label-default">驳回</span>
+            {% else %}
+              <span class="label label-success">{{ c.status }}</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if c.status == "已处理" or c.status == "驳回" %}
+              <a href="{% url 'market:admin_handle_complaint' c.complaint_id %}"
+                class="btn btn-xs btn-default">查看</a>
+            {% else %}
+              <a href="{% url 'market:admin_handle_complaint' c.complaint_id %}"
+                class="btn btn-xs btn-danger">处理</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

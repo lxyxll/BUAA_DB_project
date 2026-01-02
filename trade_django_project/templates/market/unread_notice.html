@@ -1,0 +1,57 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}未读消息{% endblock %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>未读消息</strong>
+    <a class="btn btn-default btn-xs pull-right" href="{% url 'market:notice_list' %}">查看全部</a>
+  </div>
+
+  <div class="panel-body">
+    {% if notices %}
+      <ul class="list-group">
+        {% for n in notices %}
+        <li class="list-group-item">
+          <div class="clearfix">
+            <div class="pull-right">
+              <small class="text-muted">{{ n.created_at }}</small>
+              <form method="post"
+                    action="{% url 'market:mark_read' n.notice_id %}"
+                    style="display:inline-block; margin-left:8px;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-xs">标记已读</button>
+              </form>
+            </div>
+
+            <div>
+              <span class="label label-info">{{ n.type }}</span>
+
+              {% if n.related_order_id %}
+                <a class="text-muted" style="margin-left:8px;"
+                   href="{% url 'market:order_detail' n.related_order_id %}">
+                  订单 #{{ n.related_order_id }}
+                </a>
+              {% endif %}
+
+              <div style="margin-top:6px;">
+                {{ n.content }}
+              </div>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted" style="margin:0;">暂无未读消息</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}出物大厅{% endblock %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>出物大厅</strong>
+  </div>
+
+  <div class="panel-body">
+    {% if postings %}
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>图片</th>
+          <th>标题</th>
+          <th>价格</th>
+          <th>库存</th>
+          <th>查看</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in postings %}
+        <tr>
+          <td>
+            {% if p.image_url %}
+              <img src="{{ p.image_url }}" style="height:250px;max-width:400px;object-fit:cover;">
+            {% else %}
+              <span class="text-muted">无</span>
+            {% endif %}
+          </td>
+          
+          <td>{{ p.title }}</td>
+          <td>￥{{ p.price }}</td>
+          <td>{{ p.quantity }}</td>
+          <td>
+            <a href="{% url 'market:posting_detail' p.posting_id %}"
+               class="btn btn-xs btn-info">
+              查看详情
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p>暂无出物信息</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

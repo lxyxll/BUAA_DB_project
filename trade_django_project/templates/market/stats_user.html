@@ -1,0 +1,144 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}我的统计{% endblock %}
+
+{% block extra_css %}
+<style>
+  .stat-card{
+    background: rgba(255,255,255,.85);
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.06);
+  }
+  .stat-card .label{
+    display: inline-block;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  .stat-card .value{
+    font-size: 26px;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+  .stat-help{
+    color: #888;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  .progress{
+    margin-bottom: 0;
+    background: rgba(0,0,0,.06);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong><i class="fa fa-user"></i> 我的统计</strong>
+  </div>
+
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="stat-card">
+          <div class="label"><i class="fa fa-file-text-o"></i> 我发布的帖子</div>
+          <div class="value">{{ stats.posting_count }}</div>
+          <div class="stat-help">累计发布数量</div>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="stat-card">
+          <div class="label"><i class="fa fa-check-square-o"></i> 作为卖家完成</div>
+          <div class="value">{{ stats.seller_orders_completed }}</div>
+          <div class="stat-help">卖出订单完成数</div>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="stat-card">
+          <div class="label"><i class="fa fa-shopping-cart"></i> 作为买家完成</div>
+          <div class="value">{{ stats.buyer_orders_completed }}</div>
+          <div class="stat-help">买入订单完成数</div>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="stat-card">
+          <div class="label"><i class="fa fa-list-ul"></i> 我的订单总数</div>
+          <div class="value">{{ stats.total_orders }}</div>
+          <div class="stat-help">买家 + 卖家相关订单</div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="stat-card">
+          <div class="label"><i class="fa fa-exclamation-triangle"></i> 被投诉次数</div>
+          <div class="value">{{ stats.complaint_received }}</div>
+          <div class="stat-help">作为被投诉人累计次数</div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="stat-card">
+          <div class="label"><i class="fa fa-gavel"></i> 投诉成立/已处理</div>
+          <div class="value">{{ stats.complaint_resolved }}</div>
+          <div class="stat-help">状态为“已处理”的次数</div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="stat-card">
+          <div class="label"><i class="fa fa-line-chart"></i> 被投诉率</div>
+
+          <div class="stat-help">
+            <span id="user-complaint-rate-text"></span>
+          </div>
+
+          <div class="progress">
+            <div id="user-complaint-rate-bar"
+                 class="progress-bar"
+                 role="progressbar"
+                 data-rate="{{ stats.complaint_resolve_rate }}"
+                 style="width:0%;">
+              <span class="sr-only">rate</span>
+            </div>
+          </div>
+
+          <div class="stat-help">
+            计算：被投诉 / 总售出
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (function(){
+    var bar = document.getElementById("user-complaint-rate-bar");
+    var text = document.getElementById("user-complaint-rate-text");
+    if(!bar || !text) return;
+
+    var rate = parseFloat(bar.getAttribute("data-rate") || "0");
+    if(isNaN(rate)) rate = 0;
+
+    var pct = Math.round(rate * 100);
+    if(pct < 0) pct = 0;
+    if(pct > 100) pct = 100;
+
+    bar.style.width = pct + "%";
+    text.innerText = pct + "%";
+  })();
+</script>
+{% endblock %}

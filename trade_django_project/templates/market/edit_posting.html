@@ -1,0 +1,42 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}编辑商品{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>编辑商品</strong></div>
+  <div class="panel-body">
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>标题</label>
+        <input type="text" name="title" class="form-control" value="{{ post.title }}">
+      </div>
+      <div class="form-group">
+        <label>价格</label>
+        <input type="number" name="price" class="form-control" value="{{ post.price }}">
+      </div>
+      <div class="form-group">
+        <label>品牌</label>
+        <input type="text" name="brand" class="form-control" value="{{ post.brand }}">
+      </div>
+      <div class="form-group">
+        <label>成色</label>
+        <select name="condition" class="form-control">
+          <option value="全新" {% if post.condition == "全新" %}selected{% endif %}>全新</option>
+          <option value="几乎全新" {% if post.condition == "几乎全新" %}selected{% endif %}>几乎全新</option>
+          <option value="轻微使用痕迹" {% if post.condition == "轻微使用痕迹" %}selected{% endif %}>轻微使用痕迹</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>描述</label>
+        <textarea name="content" class="form-control" rows="4">{{ post.content }}</textarea>
+      </div>
+      <div class="form-group">
+        <label>库存</label>
+        <input type="number" name="quantity" class="form-control" value="{{ post.quantity }}">
+      </div>
+      <button type="submit" class="btn btn-success">保存修改</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

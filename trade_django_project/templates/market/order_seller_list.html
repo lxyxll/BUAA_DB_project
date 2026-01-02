@@ -1,0 +1,43 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}我的订单（卖家）{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>我的订单（卖家）</strong></div>
+  <div class="panel-body">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>订单号</th>
+          <th>买家</th>
+          <th>商品</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for o in orders %}
+        <tr>
+          <td>#{{ o.order_id }}</td>
+          <td>{{ o.buyer_name }}</td>
+          <td>{{ o.title }}</td>
+          <td><span class="label label-warning">{{ o.status }}</span></td>
+          <td>
+            <a href="{% url 'market:order_detail' o.order_id %}"
+               class="btn btn-xs btn-info">查看</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

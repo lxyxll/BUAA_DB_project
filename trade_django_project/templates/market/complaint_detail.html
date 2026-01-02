@@ -1,0 +1,17 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}投诉详情{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>投诉详情</strong></div>
+  <div class="panel-body">
+    <p><strong>投诉编号：</strong>#{{ complaint.complaint_id }}</p>
+    <p><strong>订单编号：</strong>#{{ complaint.order_id }}</p>
+    <p><strong>投诉内容：</strong></p>
+    <p>{{ complaint.content }}</p>
+    <hr>
+    <p><strong>处理结果：</strong></p>
+    <p>{{ complaint.result|default:"尚未处理" }}</p>
+  </div>
+</div>
+{% endblock %}

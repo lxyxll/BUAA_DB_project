@@ -1,0 +1,28 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}个人信息{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>个人信息</strong>
+  </div>
+  <div class="panel-body">
+    <p><strong>用户名：</strong>{{ user.username }}</p>
+    <p><strong>学号：</strong>{{ user.student_id }}</p>
+    <p><strong>邮箱：</strong>{{ user.email }}</p>
+    <p><strong>微信号：</strong>{{ user.wechat }}</p>
+    {% if user.is_admin %}
+      <p><strong>用户类型：</strong>管理员</p>
+    {% else %}
+      <p><strong>用户类型：</strong>普通用户</p>
+    {% endif %}
+  </div>
+  <div class="text-center">
+      <hr />
+      <a class="btn btn-default" href="{% url 'market:stats_user' %}">
+        <i class="fa fa-bar-chart"></i> 我的统计
+      </a>
+      <a class="btn btn-primary" href="{% url 'accounts:change_password' %}">修改密码</a>
+  </div>
+</div>
+{% endblock %}

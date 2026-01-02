@@ -1,0 +1,54 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}商品详情{% endblock %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>{{ posting.title }}</strong>
+  </div>
+
+  <div class="panel-body">
+    {% if posting.image_url %}
+      <div style="margin-bottom: 15px; text-align: center;">
+        <img src="{{ posting.image_url }}" alt="商品图片"
+            style="max-height: 350px; width: auto; display: inline-block; border: 1px solid #eee; padding: 2px;">
+      </div>
+    {% endif %}
+
+    <p>价格：￥{{ posting.price }}</p>
+    <p>库存：{{ posting.quantity }}</p>
+    
+    <p>品牌：{{ posting.brand }}</p>
+    <p>状态：{{ posting.condition }}</p>
+    <p>{{ posting.content }}</p>
+
+    <p>卖家：{{ posting.username }}</p>
+    <p>发布时间：{{ posting.created_at }}</p>
+
+    <a href="{% url 'market:create_order' posting.posting_id %}"
+       class="btn btn-success">
+      立即购买
+    </a>
+
+    {% if favorited %}
+  <a href="{% url 'market:remove_favorite' posting.posting_id %}"
+     class="btn btn-warning">
+    取消收藏
+  </a>
+{% else %}
+  <a href="{% url 'market:add_favorite' posting.posting_id %}"
+     class="btn btn-default">
+    收藏
+  </a>
+{% endif %}
+
+  </div>
+</div>
+{% endblock %}

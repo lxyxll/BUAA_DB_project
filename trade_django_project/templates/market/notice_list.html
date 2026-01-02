@@ -1,0 +1,48 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}我的消息{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>我的消息</strong></div>
+  <div class="panel-body">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>内容</th>
+          <th>时间</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for n in notices %}
+        <tr>
+          <td>{{ n.content }}</td>
+          <td>{{ n.created_at }}</td>
+          <td>
+            {% if n.status == "已读" %}
+              <span class="label label-default">已读</span>
+            {% else %}
+              <span class="label label-success">未读</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if n.status != "已读" %}
+            <form method="post" action="{% url 'market:mark_read' n.notice_id %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-xs btn-primary">标记已读</button>
+            </form>
+            {% else %}
+              -
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center">暂无消息</td></tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  </div>
+</div>
+{% endblock %}

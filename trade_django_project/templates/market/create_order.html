@@ -1,0 +1,18 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}创建订单{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>创建订单</strong></div>
+  <div class="panel-body">
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>购买数量</label>
+        <input type="number" name="quantity" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary">提交订单</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

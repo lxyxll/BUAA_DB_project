@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: trade_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: trade_market
+      MYSQL_USER: trade_user
+      MYSQL_PASSWORD: strongpassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  web:
+    build: .
+    container_name: trade_web
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DJANGO_SECRET_KEY: "please-change-me"
+      DJANGO_DEBUG: "False"
+      DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
+      MYSQL_DATABASE: trade_market
+      MYSQL_USER: trade_user
+      MYSQL_PASSWORD: strongpassword
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+    volumes:
+      - static_data:/app/staticfiles
+
+  nginx:
+    image: nginx:latest
+    container_name: trade_nginx
+    restart: always
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - static_data:/static:ro
+
+volumes:
+  db_data:
+  static_data:

@@ -1,0 +1,61 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}搜索结果{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    搜索结果
+    <span class="pull-right text-muted">共 {{ results|length }} 条</span>
+  </div>
+</div>
+
+<div class="row">
+  {% for p in results %}
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+            {{ p.title }}
+          </div>
+
+          <div style="margin-top:8px; font-size:16px;" class="text-danger">
+            ￥{{ p.price }}
+          </div>
+
+          <div style="margin-top:6px;">
+            {% if p.tag_name %}
+              <span class="label label-primary">{{ p.tag_name }}</span>
+            {% endif %}
+          </div>
+
+          <div class="text-muted" style="margin-top:8px; font-size:12px;">
+            卖家：{{ p.owner_name }}
+            {% if p.owner_building %} · {{ p.owner_building }}栋{% endif %}
+            {% if p.owner_floor %}{{ p.owner_floor }}层{% endif %}
+          </div>
+
+          <div style="margin-top:10px;">
+            <a href="{% url 'market:posting_detail' p.posting_id %}"
+               class="btn btn-xs btn-info">查看</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="col-xs-12">
+      <div class="alert alert-warning">
+        没有找到符合条件的出物，请调整关键词/标签/范围后重试。
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

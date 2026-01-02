@@ -1,0 +1,54 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}公告列表{% endblock %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>系统公告</strong>
+
+    {% if is_admin %}
+      <a class="btn btn-primary btn-xs pull-right"
+         href="{% url 'market:admin_publish_announcement' %}">
+        发布公告
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="panel-body">
+    {% if announcements %}
+      <ul class="list-group">
+        {% for a in announcements %}
+        <li class="list-group-item">
+          <a href="{% url 'market:announcement_detail' a.notice_id %}">
+            {{ a.title }}
+          </a>
+          <span class="pull-right text-muted">{{ a.created_at }}</span>
+
+          {% if is_admin %}
+            <form method="post"
+                  action="{% url 'market:admin_delete_announcement' a.notice_id %}"
+                  style="display:inline; margin-left:10px;">
+              {% csrf_token %}
+              <button type="submit"
+                      class="btn btn-danger btn-xs pull-right"
+                      onclick="return confirm('确认删除该公告？');">
+                删除
+              </button>
+            </form>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">暂无公告</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

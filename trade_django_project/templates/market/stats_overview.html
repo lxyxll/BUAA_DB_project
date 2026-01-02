@@ -1,0 +1,131 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}系统总览统计{% endblock %}
+
+{% block extra_css %}
+<style>
+  .kpi{
+    background: rgba(255,255,255,.85);
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.06);
+  }
+  .kpi .title{
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .kpi .num{
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+  .kpi .meta{
+    color: #888;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  .progress{ margin-bottom:0; background: rgba(0,0,0,.06); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong><i class="fa fa-dashboard"></i> 系统总览统计</strong>
+    <span class="pull-right" style="color:#888;">仅管理员可见</span>
+  </div>
+
+  <div class="panel-body">
+
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="kpi">
+          <div class="title"><i class="fa fa-users"></i> 用户总数</div>
+          <div class="num">{{ overview.user_count }}</div>
+          <div class="meta">全站注册用户</div>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="kpi">
+          <div class="title"><i class="fa fa-tags"></i> 上架帖子总数</div>
+          <div class="num">{{ overview.posting_count }}</div>
+          <div class="meta">status = 上架</div>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="kpi">
+          <div class="title"><i class="fa fa-check-circle-o"></i> 完成订单</div>
+          <div class="num">{{ overview.order_completed }}</div>
+          <div class="meta">status = 完成</div>
+        </div>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="kpi">
+          <div class="title"><i class="fa fa-ban"></i> 取消订单</div>
+          <div class="num">{{ overview.order_canceled }}</div>
+          <div class="meta">status = 取消</div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="kpi">
+          <div class="title"><i class="fa fa-exclamation-triangle"></i> 投诉总数</div>
+          <div class="num">{{ overview.complaint_count }}</div>
+          <div class="meta">全量投诉记录</div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="kpi">
+          <div class="title"><i class="fa fa-gavel"></i> 已处理投诉</div>
+          <div class="num">{{ overview.complaint_resolved }}</div>
+          <div class="meta">status = 已处理</div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr />
+
+    <div>
+      <a class="btn btn-default" href="{% url 'market:index' %}">
+        <i class="fa fa-home"></i> 返回首页
+      </a>
+
+      <a class="btn btn-primary" href="{% url 'market:stats_monthly_orders' %}">
+           <i class="fa fa-area-chart"></i> 日订单趋势
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (function(){
+    var bar = document.getElementById("sys-complaint-rate-bar");
+    var text = document.getElementById("sys-complaint-rate-text");
+    if(!bar || !text) return;
+
+    var rate = parseFloat(bar.getAttribute("data-rate") || "0");
+    if(isNaN(rate)) rate = 0;
+
+    var pct = Math.round(rate * 100);
+    if(pct < 0) pct = 0;
+    if(pct > 100) pct = 100;
+
+    bar.style.width = pct + "%";
+    text.innerText = pct + "%";
+  })();
+</script>
+{% endblock %}

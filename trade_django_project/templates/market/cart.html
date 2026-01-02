@@ -1,0 +1,31 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}购物车{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>购物车</strong></div>
+  <div class="panel-body">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>商品</th>
+          <th>数量</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+        <tr>
+          <td>{{ item.posting_title }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>
+            <a href="{% url 'market:remove_from_cart' item.posting_id %}"
+               class="btn btn-xs btn-danger">移除</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

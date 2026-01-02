@@ -1,0 +1,84 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}订单详情{% endblock %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>订单详情</strong></div>
+  <div class="panel-body">
+
+    <p><strong>订单号：</strong>#{{ order.order_id }}</p>
+    <p><strong>商品：</strong>{{ order.title }}</p>
+    <p><strong>数量：</strong>{{ order.num }}</p>
+    <p><strong>状态：</strong>{{ order.status }}</p>
+
+    <hr>
+
+    {# ====================================================== #}
+    {# 1. 卖家确认交接（POST，修改状态） #}
+    {# ====================================================== #}
+    {% if order.can_confirm %}
+      <form method="post"
+            action="{% url 'market:confirm_order' order.order_id %}"
+            style="display:inline;">
+        {% csrf_token %}
+        <button type="submit"
+                class="btn btn-success"
+                onclick="return confirm('确认已经完成交接？')">
+          确认交接
+        </button>
+      </form>
+    {% endif %}
+
+    {# ====================================================== #}
+    {# 2. 买家 / 卖家取消订单（POST） #}
+    {# ====================================================== #}
+    {% if order.can_cancel %}
+      <form method="post"
+            action="{% url 'market:cancel_order' order.order_id %}"
+            style="display:inline;">
+        {% csrf_token %}
+        <input type="hidden" name="reason" value="用户主动取消订单">
+        <button type="submit"
+                class="btn btn-danger"
+                onclick="return confirm('确认取消该订单？')">
+          取消订单
+        </button>
+      </form>
+    {% endif %}
+
+    {# ====================================================== #}
+    {# 3. 买家完成订单（POST） #}
+    {# ====================================================== #}
+    {% if order.can_complete %}
+      <form method="post"
+            action="{% url 'market:complete_order' order.order_id %}"
+            style="display:inline;">
+        {% csrf_token %}
+        <button type="submit"
+                class="btn btn-primary"
+                onclick="return confirm('确认订单已完成？')">
+          完成订单
+        </button>
+      </form>
+    {% endif %}
+
+    {# ====================================================== #}
+    {# 4. 投诉入口（GET，仅跳转页面，不改状态） #}
+    {# ====================================================== #}
+    {% if order.can_complain %}
+      <a href="{% url 'market:submit_complaint' order.order_id %}"
+         class="btn btn-warning">
+        投诉该订单
+      </a>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

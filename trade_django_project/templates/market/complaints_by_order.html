@@ -1,0 +1,42 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}订单投诉{% endblock %}
+
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>订单相关投诉</strong></div>
+  <div class="panel-body">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>投诉编号</th>
+          <th>投诉人</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in complaints %}
+        <tr>
+          <td>#{{ c.complaint_id }}</td>
+          <td>{{ c.user_name }}</td>
+          <td>
+            <span class="label label-warning">{{ c.status }}</span>
+          </td>
+          <td>
+            <a href="{% url 'market:complaint_detail' c.complaint_id %}"
+               class="btn btn-xs btn-info">查看</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

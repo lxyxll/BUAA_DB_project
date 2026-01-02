@@ -1,0 +1,28 @@
+{% extends 'adminlte_base.html' %}
+{% block title %}我的收藏{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="panel panel-default">
+  <div class="panel-heading"><strong>我的收藏</strong></div>
+  <div class="panel-body">
+    <ul class="list-group">
+      {% for f in favorites %}
+      <li class="list-group-item">
+        <a href="{% url 'market:posting_detail' f.posting_id %}">
+          {{ f.title }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
